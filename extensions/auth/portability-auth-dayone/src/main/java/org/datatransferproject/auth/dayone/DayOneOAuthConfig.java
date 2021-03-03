@@ -29,7 +29,7 @@ public class DayOneOAuthConfig implements OAuth2Config {
 
   @Override
   public String getServiceName() {
-    return "Day One";
+    return "Day_One";
   }
 
   @Override
@@ -57,7 +57,7 @@ public class DayOneOAuthConfig implements OAuth2Config {
   public Map<String, String> getAdditionalAuthUrlParameters() {
     return ImmutableMap.of(
         "state", "{}",
-        "serviceId", "dtp",
-        "serviceName", "dtp");
+        "serviceId", "dtp-fb",
+        "serviceName", "dtp-fb");
   }
 }

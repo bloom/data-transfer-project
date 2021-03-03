@@ -73,6 +73,6 @@ public class DayOneTransferExtension implements TransferExtension {
 
   @Override
   public String getServiceId() {
-    return "Day One";
+    return "Day_One";
   }
 }

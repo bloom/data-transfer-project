@@ -16,6 +16,8 @@
 
 package org.datatransferproject.transfer.dayone;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.http.*;
 import org.datatransferproject.spi.transfer.idempotentexecutor.IdempotentImportExecutor;
@@ -48,23 +50,41 @@ public class DayOneImporter
       throws Exception {
     idempotentExecutor.executeAndSwallowIOExceptions(
         data.getId(),
-        "", // TODO: What should go here? We're taking all of the data at once and it suggests a human readable name.
+        "", // TODO: What should go here? We're taking all of the data at once and it suggests a
+        // human readable name.
         () -> {
-          // TODO: Once Gage's endpoint is up and running, we'll want to chunk the data here and send it to ingest in parts.
           HttpRequestFactory factory = httpTransport.createRequestFactory();
-          String serializedData = objectMapper.writeValueAsString(data);
+          DayOneIngestModel ingestModel = new DayOneIngestModel(data);
+
+          String serializedData = objectMapper.writeValueAsString(ingestModel);
           HttpContent content = ByteArrayContent.fromString("application/json", serializedData);
 
           HttpRequest request =
               factory.buildPostRequest(
                   new GenericUrl(new URL(BASE_URL + "/api/dtp/ingest")), content);
+
+          HttpHeaders headers = new HttpHeaders();
+          headers.setAuthorization("Bearer " + authData.getAccessToken());
+          request.setHeaders(headers);
+
           request.setReadTimeout(120_000);
           HttpResponse response = request.execute();
-          // Handle possible failures?
-          System.out.println(response);
+
+          // TODO: Figure out a list of possible failures and handle them here. (This is why the
+          // request is captured by 'response.')
 
           return null;
         });
     return ImportResult.OK;
+  }
+}
+
+class DayOneIngestModel {
+  @JsonProperty("data")
+  private SocialActivityContainerResource data;
+
+  @JsonCreator
+  DayOneIngestModel(@JsonProperty("data") SocialActivityContainerResource data) {
+    this.data = data;
   }
 }
