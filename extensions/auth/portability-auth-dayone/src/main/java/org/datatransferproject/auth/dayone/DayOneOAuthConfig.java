@@ -25,7 +25,7 @@ import java.util.Set;
 
 /** Class that provides Day One-specific information for OAuth2 */
 public class DayOneOAuthConfig implements OAuth2Config {
-  private static final String BASE_URL = "https://gaged1.ngrok.io";
+  private static final String BASE_URL = "https://stg.dayone.app";
 
   @Override
   public String getServiceName() {

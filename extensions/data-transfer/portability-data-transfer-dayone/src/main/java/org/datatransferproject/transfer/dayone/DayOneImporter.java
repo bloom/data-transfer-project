@@ -31,7 +31,7 @@ import java.util.UUID;
 
 public class DayOneImporter
     implements Importer<TokensAndUrlAuthData, SocialActivityContainerResource> {
-  private static final String BASE_URL = "https://gaged1.ngrok.io";
+  private static final String BASE_URL = "https://stg.dayone.app";
 
   private final HttpTransport httpTransport;
   private final ObjectMapper objectMapper;
